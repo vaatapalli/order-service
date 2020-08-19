@@ -30,9 +30,9 @@ public class OrderServiceController {
 
     }
 
-    @RequestMapping(value = "/get/{customer_code}")
-    public ResponseEntity<Order> findItem(@PathVariable String customer_code) {
-        Optional<Order> order = orderService.findOrder(customer_code);
+    @RequestMapping(value = "/get/{customerName}")
+    public ResponseEntity<Order> findItem(@PathVariable String customerName) {
+        Optional<Order> order = orderService.findOrder(customerName);
         if (order.isPresent()) {
             return ResponseEntity.ok(order.get());
         }

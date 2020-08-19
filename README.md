@@ -15,7 +15,7 @@ GetOrder
 http://localhost:8080/get
 
 @GetSelectedOrder
-http://localhost:8080/get/{customer_code}
+http://localhost:8080/get/{customerName}
 
 @PostOrder 
 http://localhost:8080/createorder
