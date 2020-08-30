@@ -3,6 +3,7 @@
 Development server Navigate to http://localhost:8080/.
 
 Technology Stack :
+-----------------
 
 Java 8
 
@@ -16,19 +17,48 @@ password : ""
 
 Spring Boot 2.3.3.RELEASE
 
-GetOrder
-http://localhost:8080/get
+@GetOrderList
+http://localhost:8080/orders
+
+Note :
+------
+if Item-service is down it will return "fallbackMethod" and the resultant response will be
+
+--------------------------------
+[
+    {
+        "customerName": "cache customer",
+        "orderDate": "2020-08-30",
+        "shipping_address": "cache Address",
+        "order_items": [
+            {
+                "product_code": 1,
+                "product_name": "cache product 1",
+                "quantity": 10
+            },
+            {
+                "product_code": 2,
+                "product_name": "cache product 2",
+                "quantity": 20
+            }
+        ],
+        "total_cost": 123
+    }
+]
+
+------------------------------------------------
+ 
 
 @GetSelectedOrder
-http://localhost:8080/get/{customerName}
+http://localhost:8080/orders/{customerName}}
 
 @PostOrder 
-http://localhost:8080/createorder
+http://localhost:8080/orders
 
 Sample body :
 ------------
 {
-        "customerName": "customer name",
+        "customerName": "epam",
         "shipping_address": "Hyderabad",
         "order_items": [
 							{
@@ -45,5 +75,7 @@ Sample body :
 		"total_cost" : "250"
 	
 }
+
+
 
 
