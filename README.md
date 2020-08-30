@@ -55,7 +55,7 @@ http://localhost:8080/orders/{customerName}}
 @PostOrder 
 http://localhost:8080/orders
 
-Sample body :
+Sample Request :
 ------------
 {
         "customerName": "epam",
