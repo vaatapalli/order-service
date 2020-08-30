@@ -1,9 +1,9 @@
-package com.oservice.entity;
+package com.orderservice.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity(name = "orderservice")
@@ -21,17 +21,14 @@ public class Order {
     String shipping_address;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_items_id"))
-    @Column(name = "oitems")
-    @NotNull(message = "order_items cannot be null")
-    Set<Item> order_items;
+    @Column(name = "oitems", insertable = false, updatable = false)
+    List<Item> order_items;
 
     @Column(name = "_total_cost")
     @NotNull(message = "total_cost cannot be null")
     Double total_cost;
 
     public Order() {
-
         this.orderDate = new Date(System.currentTimeMillis());
     }
 
@@ -51,11 +48,11 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public Set<Item> getOrder_items() {
+    public List<Item> getOrder_items() {
         return order_items;
     }
 
-    public void setOrder_items(Set<Item> order_items) {
+    public void setOrder_items(List<Item> order_items) {
         this.order_items = order_items;
     }
 
@@ -74,5 +71,16 @@ public class Order {
 
     public void setTotal_cost(Double total_cost) {
         this.total_cost = total_cost;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "customerName='" + customerName + '\'' +
+                ", orderDate=" + orderDate +
+                ", shipping_address='" + shipping_address + '\'' +
+                ", order_items=" + order_items +
+                ", total_cost=" + total_cost +
+                '}';
     }
 }

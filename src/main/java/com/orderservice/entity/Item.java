@@ -1,17 +1,22 @@
-package com.oservice.entity;
+package com.orderservice.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class Item {
 
-    @Column(name="_product_code")
+    @Column(name = "_product_code")
+    @NotNull(message = "productcode cannot be null")
     Long product_code;
 
-    @Column(name="_product_name")
+    @Column(name = "_product_name")
+    @NotNull(message = "productName cannot be null")
     String product_name;
 
-    @Column(name="_quantity")
+    @Column(name = "_quantity")
+    @NotNull(message = "quantity cannot be null")
     Long quantity;
 
     public Item() {
@@ -46,4 +51,5 @@ public class Item {
     public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
+
 }
