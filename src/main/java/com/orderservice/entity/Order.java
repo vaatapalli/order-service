@@ -1,7 +1,11 @@
 package com.orderservice.entity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.List;
 
@@ -11,22 +15,27 @@ public class Order {
 
     @Id
     @NotNull(message = "customerName cannot be null")
-    String customerName;
+    @NotBlank(message = "customerName is mandatory")
+    private String customerName;
 
     @Column(name = "_orderDate")
-    Date orderDate;
+    private Date orderDate;
 
     @Column(name = "_shipping_address")
     @NotNull(message = "shipping_address cannot be null")
-    String shipping_address;
+    @NotBlank(message = "shipping_address is mandatory")
+    private String shipping_address;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @Column(name = "oitems", insertable = false, updatable = false)
-    List<Item> order_items;
+    @NotNull(message = "order_items cannot be null")
+    @Size(min=1,max=20,message = "order_items range 1 to 20")
+    private List<@Valid Item> order_items;
 
     @Column(name = "_total_cost")
     @NotNull(message = "total_cost cannot be null")
-    Double total_cost;
+    @DecimalMin(value="1.0",message = "total_cost must be greater than or equal to 1")
+    private Double total_cost;
 
     public Order() {
         this.orderDate = new Date(System.currentTimeMillis());
