@@ -50,7 +50,7 @@ if Item-service is down it will return "fallbackMethod" and the resultant respon
  
 
 @GetSelectedOrder
-http://localhost:8080/orders/{customerName}}
+http://localhost:8080/orders/{customerName}
 
 @PostOrder 
 http://localhost:8080/orders
