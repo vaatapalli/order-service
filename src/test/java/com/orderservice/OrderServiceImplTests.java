@@ -136,7 +136,7 @@ class OrderServiceImplTests {
     }
 
     @Test
-    void findCachedOrderByCustomerName() {
+    void fallbackOrder() {
         Order order = new Order();
         List<Item> items = new ArrayList<>();
         order.setCustomerName("cache customer");
@@ -148,7 +148,7 @@ class OrderServiceImplTests {
         List<Order> orders = new ArrayList<>();
         orders.add(order);
 
-        List<Order> orderList = orderService.findCachedOrderByCustomerName();
+        List<Order> orderList = orderService.fallbackOrder();
         Order resultOrder = orderList.get(0);
 
         Assertions.assertEquals("cache customer", resultOrder.getCustomerName());

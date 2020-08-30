@@ -11,6 +11,8 @@ import com.orderservice.exceptions.ServerNotFoundException;
 import com.orderservice.proxy.OrderItemProxy;
 import com.orderservice.repository.OrderServiceRepository;
 import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderServiceRepository serviceRepository;
 
@@ -37,8 +41,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @HystrixCommand(
-            fallbackMethod = "findCachedOrderByCustomerName", commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "5000")
+            fallbackMethod = "fallbackOrder", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "2000")
     })
     public List<Order> getOrders() {
 
@@ -70,8 +76,9 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    public List<Order> fallbackOrder() {
 
-    public List<Order> findCachedOrderByCustomerName() {
+        logger.error("fallback response...!");
 
         List<Item> items = new ArrayList<>();
         items.add(new Item(1L, "cache product 1", 10L));
