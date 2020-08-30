@@ -43,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @HystrixCommand(
             fallbackMethod = "fallbackOrder", commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "3"),
             @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
             @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "2000")
     })
@@ -54,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
             ResponseEntity<List<OrderItem>> response = orderItemProxy.getOrderItems();
             orderItems = response.getBody();
         } catch (FeignException e) {
+            logger.error("Item-service is Not available");
             throw new ServerNotFoundException("Server not Found");
         }
         return this.addItemsToOrder(orders, orderItems);
@@ -101,6 +103,7 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Order> getOrder(String customer_name) {
         Order order = serviceRepository.findByCustomerName(customer_name);
         if (order == null) {
+            logger.error("No Order Found");
             throw new OrderNotFoundExcpetion("No Order Found error");
         } else {
             String customerName = order.getCustomerName();
@@ -111,8 +114,10 @@ public class OrderServiceImpl implements OrderService {
             } catch (FeignException e) {
                 HttpStatus httpStatus = HttpStatus.resolve(e.status());
                 if (httpStatus == null) {
+                    logger.error("Item-service is Not available");
                     throw new ServerNotFoundException("Items-Server Not Found");
                 }
+                logger.error("No Item Found");
                 throw new ItemNotFoundExcpetion("No Item Found error");
             }
             order.setOrder_items(items);
@@ -135,6 +140,7 @@ public class OrderServiceImpl implements OrderService {
         } catch (FeignException e) {
             HttpStatus httpStatus = HttpStatus.resolve(e.status());
             if (httpStatus == null) {
+                logger.error("Item-service is Not available");
                 throw new ServerNotFoundException("Item-Service is Not available");
             }
         }
